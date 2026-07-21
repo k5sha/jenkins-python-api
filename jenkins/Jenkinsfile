@@ -46,7 +46,7 @@ pipeline {
                     retry(5) {
                         script {
                             sleep(time: 5, unit: 'SECONDS')
-                            sh 'curl -f -s http://localhost:8000/health'
+                            sh 'docker exec my-python-api python3 -c "import urllib.request; print(urllib.request.urlopen(\'http://localhost:8000/health\').read())"'
                         }
                     }
                 }
