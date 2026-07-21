@@ -1,5 +1,6 @@
 pipeline {
     agent any 
+    
     stages {
         stage('Tests') {
             agent {
@@ -37,6 +38,32 @@ pipeline {
                     sh "docker run -d --name my-python-api -p 8000:8000 python-api:latest"
                 }
             }
+        }
+        
+        stage('Health Check') {
+            steps {
+                timeout(time: 10, unit: 'SECONDS') {
+                    retry(5) {
+                        script {
+                            sleep(time: 5, unit: 'SECONDS')
+                            sh 'curl -f -s http://localhost:8000/health'
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    post { 
+        always {
+            echo "Pipeline finished execution."
+            sh "docker image prune -f || true"
+        }
+        failure { 
+            echo 'Something failed :( Pipeline execution failed.'
+        }
+        success {
+            echo 'Everything passed successfully! API is up and running.'
         }
     }
 }
