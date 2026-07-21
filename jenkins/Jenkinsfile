@@ -1,0 +1,42 @@
+pipeline {
+    agent any 
+    stages {
+        stage('Tests') {
+            agent {
+                docker {
+                    image 'python:3.11-slim'
+                    reuseNode true
+                }
+            }
+            steps {
+                sh '''
+                    echo "Python version:"
+                    python3 --version
+                    
+                    echo "Installing dependencies..."
+                    pip install --no-cache-dir -r requirements.txt
+                    
+                    echo "Running tests..."
+                    pytest -v
+                '''
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    sh "docker build -t python-api:latest ."
+                }
+            }
+        }
+        
+        stage('Deploy Container') {
+            steps {
+                script {
+                    sh "docker rm -f my-python-api || true"
+                    sh "docker run -d --name my-python-api -p 8000:8000 python-api:latest"
+                }
+            }
+        }
+    }
+}
