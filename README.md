@@ -1,10 +1,10 @@
 # 🚀 Python FastAPI CI/CD Pipeline with Jenkins & Docker
 
-> A lightweight, production-ready Python FastAPI microservice featuring automated testing with `pytest`, containerization, and a fully automated CI/CD deployment pipeline powered by Jenkins and Docker.
+> A lightweight, production-ready Python FastAPI microservice featuring automated testing with pytest, containerization, robust health checking, and a fully automated CI/CD deployment pipeline powered by Jenkins and Docker.
 
 
 
-<img width="1710" height="649" alt="Screenshot 2026-07-21 at 19 43 48" src="https://github.com/user-attachments/assets/e5a6d554-c1c7-440c-ba5b-dceef25ee848" />
+<img width="1710" height="652" alt="Screenshot 2026-07-21 at 19 56 39" src="https://github.com/user-attachments/assets/bed17b79-fdbe-4cbc-9ae3-a8e3d6fd29d5" />
 
 
 ## 🛠️ Tech Stack & Tools
@@ -90,8 +90,8 @@ The pipeline defined in the `Jenkinsfile` automates the entire software delivery
 2. **Run Tests:** Executes automated `pytest` suites to validate application logic.
 3. **Build Docker Image:** Packages the FastAPI application into a lightweight, optimized Docker container.
 4. **Deploy Container:** Automatically stops any legacy container instances and boots up the fresh build on port `8000`.
-
-
+5. **Health Check:** Executes an automated internal validation probe (`docker exec`) targeting the `/health` endpoint to guarantee the application initialised successfully and is ready to accept production traffic.
+6. **Post Execution (always):** Automatically triggers a clean-up step (`docker image prune`) to keep the host disk free of dangling build cache images.
 ## 📸 Screenshots & Demo
 
 
@@ -102,4 +102,8 @@ The pipeline defined in the `Jenkinsfile` automates the entire software delivery
 ### 2. FastAPI Interactive Swagger Documentation
 
 <img width="1710" height="995" alt="Screenshot 2026-07-21 at 19 46 08" src="https://github.com/user-attachments/assets/21d66ef7-d2c4-4911-9f80-5ba1303b7083" />
+
+### 3. Jenkins Health Check
+
+<img width="1710" height="652" alt="Screenshot 2026-07-21 at 19 56 39" src="https://github.com/user-attachments/assets/bed17b79-fdbe-4cbc-9ae3-a8e3d6fd29d5" />
 
